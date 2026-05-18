@@ -1,0 +1,3 @@
+This is safe sample data for testing sysadmin-toolkit backups.
+
+You can back up and restore this folder without touching real system files.

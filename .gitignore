@@ -1,0 +1,11 @@
+logs/*
+reports/*
+backups/*
+
+!logs/.gitkeep
+!reports/.gitkeep
+!backups/.gitkeep
+
+*.log
+*.tmp
+restore-demo/

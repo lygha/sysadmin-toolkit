@@ -1,0 +1,3 @@
+app_name=sysadmin-toolkit-demo
+environment=sample
+owner=student
