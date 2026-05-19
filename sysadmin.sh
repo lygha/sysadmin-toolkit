@@ -8,7 +8,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 show_help() {
     cat <<'EOF'
-sysadmin-toolkit
+====================================
+ Linux SysAdmin Toolkit
+ Operating Systems Project
+====================================
 
 Usage:
   ./sysadmin.sh <module> <command> [arguments]
@@ -27,8 +30,8 @@ Dispatcher examples:
   ./sysadmin.sh logs failed-logins 7
 
 Note:
-  Module functionality is not implemented yet. This foundation only wires
-  project structure, shared helpers, configuration, and dispatching.
+  Some commands require sudo because they manage Linux users or read
+  protected system logs.
 EOF
 }
 

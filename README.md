@@ -1,10 +1,22 @@
-# sysadmin-toolkit
+# Linux SysAdmin Toolkit
 
-A Bash-based Linux System Administration Toolkit for a university Operating
-Systems lab project.
+## Project Overview
 
-The toolkit has one main dispatcher, `sysadmin.sh`, and separate modules for
-monitoring, user administration, backup automation, and log inspection.
+Linux SysAdmin Toolkit is a Bash-based Linux system administration toolkit for
+an Operating Systems project. It provides one main dispatcher script,
+`sysadmin.sh`, with separate modules for monitoring, backups, user management,
+log analysis, reporting, and logging.
+
+The project was tested successfully on Ubuntu Server running inside VMware.
+
+## Features
+
+- Monitoring
+- Backups
+- User management
+- Log analysis
+- Reporting
+- Logging
 
 ## Project Structure
 
@@ -19,48 +31,73 @@ sysadmin-toolkit/
 |   `-- common.sh
 |-- modules/
 |   |-- monitor.sh
-|   |-- users.sh
 |   |-- backup.sh
+|   |-- users.sh
 |   `-- logs.sh
-|-- reports/
-|-- logs/
 |-- samples/
 |   |-- users.csv
 |   `-- test-data/
-`-- backups/
+|-- reports/
+|-- logs/
+|-- backups/
+`-- screenshots/
+    `-- README.txt
 ```
 
-## Basic Usage
+## Installation
 
-From the project root:
+Clone the project and enter the toolkit folder:
+
+```bash
+git clone https://github.com/your-username/os-terminal.git
+cd os-terminal/sysadmin-toolkit
+```
+
+Make the scripts executable:
 
 ```bash
 chmod +x sysadmin.sh demo.sh lib/common.sh modules/*.sh
+```
+
+## Usage
+
+Run commands through the main dispatcher:
+
+```bash
+./sysadmin.sh <module> <command> [arguments]
+```
+
+General help:
+
+```bash
 ./sysadmin.sh --help
 ```
 
-Modules can also be run directly:
+## Module Descriptions
 
-```bash
-./modules/monitor.sh --help
-./modules/backup.sh --help
-```
+### monitor
 
-## Quick Demo
+Provides system monitoring commands for CPU, memory, disk usage, processes,
+network information, and monitoring reports.
 
-Run the safe two-minute demo from the project root:
+### backup
 
-```bash
-chmod +x sysadmin.sh demo.sh modules/*.sh
-./demo.sh
-```
+Creates full and incremental backups, lists backup archives, verifies backup
+files, restores archives into a target folder, and rotates old backups.
 
-The demo runs safe monitoring, backup, restore-to-`restore-demo`, user listing,
-and permission scanning commands. It intentionally avoids destructive or
-root-required commands such as creating/deleting Linux users and reading
-protected system logs.
+### users
 
-## Monitoring Examples
+Lists human users, creates demo users from a CSV file, deletes demo users,
+generates user audit reports, and scans directories for world-writable files.
+
+### logs
+
+Analyzes Linux system logs for failed logins, successful logins, error messages,
+top IP addresses, and summary reports.
+
+## Example Commands
+
+Monitoring:
 
 ```bash
 ./sysadmin.sh monitor cpu
@@ -71,101 +108,29 @@ protected system logs.
 ./sysadmin.sh monitor report
 ```
 
-## Backup Examples
-
-Safe sample data is included in `samples/test-data/`, so you can test backup
-commands without touching real system folders.
-
-Create a full compressed backup:
+Backups:
 
 ```bash
 ./sysadmin.sh backup full ./samples/test-data ./backups
-```
-
-Create an incremental backup:
-
-```bash
 ./sysadmin.sh backup incr ./samples/test-data ./backups
-```
-
-List backups:
-
-```bash
 ./sysadmin.sh backup list ./backups
-```
-
-Verify a full backup:
-
-```bash
 ./sysadmin.sh backup verify ./backups/full-test-data-YYYYMMDD-HHMMSS.tar.gz
-```
-
-Restore a full backup into a test folder:
-
-```bash
 ./sysadmin.sh backup restore ./backups/full-test-data-YYYYMMDD-HHMMSS.tar.gz ./restore-test
-```
-
-Rotate full backups and keep only the 3 newest:
-
-```bash
 ./sysadmin.sh backup rotate ./backups 3
 ```
 
-Use `-y` or `--yes` to skip confirmation for restore and rotate:
-
-```bash
-./sysadmin.sh backup restore ./backups/full-test-data-YYYYMMDD-HHMMSS.tar.gz ./restore-test -y
-./sysadmin.sh backup rotate ./backups 3 --yes
-```
-
-## User Management Examples
-
-The user module can list users without sudo:
+User management:
 
 ```bash
 ./sysadmin.sh users list
-```
-
-Create demo/test users from the safe sample CSV:
-
-```bash
+./sysadmin.sh users perms ./samples
 sudo ./sysadmin.sh users add-bulk ./samples/users.csv
-```
-
-The sample CSV contains only demo users:
-
-```text
-username,fullname,group
-testuser1,Test User One,students
-testuser2,Test User Two,students
-```
-
-Delete demo/test users only. This removes the user's home directory, so use it
-carefully:
-
-```bash
 sudo ./sysadmin.sh users delete testuser1 --archive-home
 sudo ./sysadmin.sh users delete testuser2 -y
-```
-
-Generate a root-only user security audit:
-
-```bash
 sudo ./sysadmin.sh users audit
 ```
 
-Scan a directory for world-writable files and directories:
-
-```bash
-./sysadmin.sh users perms ./samples
-```
-
-## Log Analysis Examples
-
-System log analysis reads protected files such as `/var/log/auth.log`,
-`/var/log/secure`, `/var/log/syslog`, and `/var/log/messages`, so these commands
-require sudo:
+Log analysis:
 
 ```bash
 sudo ./sysadmin.sh logs failed-logins 7
@@ -175,17 +140,15 @@ sudo ./sysadmin.sh logs top-ips
 sudo ./sysadmin.sh logs summary
 ```
 
-Reports are written to `reports/` as plain-text files and include both readable
-sections and CSV sections.
+## Root Required Commands
 
-## Root-required Commands
-
-These commands require sudo because they modify Linux users or read protected
-system files:
+These commands require `sudo` because they create/delete Linux users, inspect
+protected account information, or read protected system logs:
 
 ```bash
 sudo ./sysadmin.sh users add-bulk ./samples/users.csv
 sudo ./sysadmin.sh users delete testuser1 --archive-home
+sudo ./sysadmin.sh users delete testuser2 -y
 sudo ./sysadmin.sh users audit
 
 sudo ./sysadmin.sh logs failed-logins 7
@@ -195,34 +158,77 @@ sudo ./sysadmin.sh logs top-ips
 sudo ./sysadmin.sh logs summary
 ```
 
-Use the user commands only with demo/test users unless you intentionally want to
-modify real Linux accounts.
+Use user creation and deletion commands only with demo/test users unless you
+intentionally want to modify real Linux accounts.
 
-## Sample Crontab Entries
+## Demo Instructions
 
-Daily incremental backup at 2:00 AM:
+Run the safe demonstration from the project root:
 
-```cron
-0 2 * * * /path/to/sysadmin-toolkit/sysadmin.sh backup incr /path/to/source /path/to/backups
+```bash
+./demo.sh
 ```
 
-Weekly full backup on Sunday at 3:00 AM:
+The demo runs safe monitoring, backup, restore-to-`restore-demo`, user listing,
+permission scanning, report display, and log display commands. `demo.sh`
+intentionally avoids destructive/root-only operations such as Linux user
+creation, user deletion, and protected system log analysis.
 
-```cron
-0 3 * * 0 /path/to/sysadmin-toolkit/sysadmin.sh backup full /path/to/source /path/to/backups
+## Reports and Logs
+
+Reports are written to:
+
+```text
+reports/
 ```
 
-## Notes
+Toolkit logs are written to:
 
-- Backup commands do not require sudo for normal user-owned files.
-- Destructive backup commands ask for confirmation unless `-y` or `--yes` is used.
-- User creation, deletion, and audit commands require sudo.
-- Log analysis commands require sudo because system logs are protected.
+```text
+logs/
+```
 
-## Final Verification Checklist
+Useful files include `logs/toolkit.log`, `logs/backup.log`, and generated report
+files such as permission or monitoring reports.
+
+## Testing
+
+Run the Bash syntax check:
 
 ```bash
 bash -n sysadmin.sh demo.sh lib/common.sh modules/*.sh
-./sysadmin.sh --help
+```
+
+Run the safe end-to-end demo:
+
+```bash
 ./demo.sh
 ```
+
+Recommended quick manual checks:
+
+```bash
+./sysadmin.sh --help
+./sysadmin.sh monitor cpu
+./sysadmin.sh monitor disk
+./sysadmin.sh users list
+./sysadmin.sh users perms ./samples
+```
+
+## Known Limitations
+
+- Rotated compressed logs are not parsed.
+- Exact syslog day filtering is conservative.
+- Incremental backups depend on `rsync`.
+- Email alerts are optional and disabled.
+
+## Future Improvements
+
+- Email alerts
+- JSON export
+- Dashboard improvements
+- Cron automation helper
+
+## Author
+
+Your Name Here

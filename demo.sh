@@ -6,7 +6,10 @@ PROJECT_ROOT="${SCRIPT_DIR}"
 
 show_help() {
     cat <<'EOF'
-demo.sh
+====================================
+ Linux SysAdmin Toolkit
+ Operating Systems Project
+====================================
 
 Usage:
   ./demo.sh
@@ -21,7 +24,7 @@ EOF
 section() {
     printf '\n'
     printf '============================================================\n'
-    printf '%s\n' "$1"
+    printf ' %s\n' "$1"
     printf '============================================================\n'
 }
 
@@ -76,8 +79,12 @@ main() {
 
     cd "${PROJECT_ROOT}"
 
+    section "Linux SysAdmin Toolkit"
+    printf 'Operating Systems Project\n'
+    printf 'Safe Ubuntu VMware demonstration\n'
+
     section "Preparing Demo"
-    chmod +x sysadmin.sh demo.sh modules/*.sh
+    chmod +x sysadmin.sh demo.sh lib/common.sh modules/*.sh
     mkdir -p reports logs backups samples
     rm -rf restore-demo
     refresh_sample_data
