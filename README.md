@@ -49,8 +49,8 @@ sysadmin-toolkit/
 Clone the project and enter the toolkit folder:
 
 ```bash
-git clone https://github.com/your-username/os-terminal.git
-cd os-terminal/sysadmin-toolkit
+git clone https://github.com/lygha/sysadmin-toolkit.git
+cd sysadmin-toolkit
 ```
 
 Make the scripts executable:
@@ -231,4 +231,4 @@ Recommended quick manual checks:
 
 ## Author
 
-Your Name Here
+Ahmad Ghalayini
